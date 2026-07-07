@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+leads_simulados.jsonl
+correos_simulados.jsonl
+pedidos.json
+chat_estado.json
+.DS_Store
+.claude/

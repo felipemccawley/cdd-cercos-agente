@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: cds-cercos-agente
+    runtime: python
+    plan: starter          # siempre activo (necesario para el vigilante de seguimiento)
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn servidor_whatsapp:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # Secretos: se ingresan en el panel de Render (no viajan en el repo)
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false
+      - key: KOMMO_TOKEN
+        sync: false
+      - key: HANDOFF_CLAVE
+        sync: false
+      # No secretos: se fijan aquí
+      - key: AGENTE_MODELO
+        value: claude-sonnet-4-6
+      - key: KOMMO_SUBDOMAIN
+        value: cds                 # TODO: confirmar subdominio real de Kommo
+      - key: KOMMO_PIPELINE_ID
+        value: ""                  # TODO: id del embudo "CDS Agente de IA"
+      - key: KOMMO_STATUS_ID
+        value: ""                  # TODO: id de la etapa "Lead entrante"
+      - key: SHOP_BASE_URL
+        value: https://www.cercosdeseguridad.cl

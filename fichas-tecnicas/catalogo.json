@@ -1,0 +1,192 @@
+{
+  "_meta": {
+    "descripcion": "Catálogo oficial de CDS - Cercos de Seguridad (cercosdeseguridad.cl). Fuente de verdad para el Agente Comercial IA. El agente NUNCA inventa specs ni precios: si un campo dice 'no_especificado', lo declara y deriva a un ejecutivo.",
+    "fuentes": {
+      "precios": "https://www.cercosdeseguridad.cl (tienda Shopify, extraído 2026-07-06)",
+      "specs_tecnicas": "Cuestionario de descubrimiento CDS + páginas de producto del sitio."
+    },
+    "fecha_actualizacion": "2026-07-06",
+    "moneda": "CLP",
+    "reglas_precio": {
+      "todos": "Los precios están publicados en NETO. El total al cliente = neto + IVA (19%). Usa cotizar_cerco / cotizar_componente para calcular; no hagas la aritmética a mano."
+    },
+    "logica_cotizacion": {
+      "unidad_de_venta": "El cerco se vende por componentes (paneles y postes), no por m². El cliente suele indicar METROS LINEALES.",
+      "panel_ancho_m": 2.5,
+      "formula_paneles": "paneles = techo(metros_lineales / 2.5)",
+      "formula_postes": "postes = paneles + 1 (para un tramo recto; esquinas y portones lo ajusta el ejecutivo).",
+      "formula_fijaciones": "fijaciones = postes × fijaciones_por_poste (4 para poste de 2,3 m; 5 para 2,6 m o más). Se incluyen en el total del cerco.",
+      "nota": "El total cotizado es del MATERIAL (paneles + postes + fijaciones). El despacho lo cotiza y coordina un ejecutivo aparte."
+    },
+    "regla_venta_online": "Todo se puede cerrar en línea (checkout Shopify del sitio). Solo el despacho lo cierra un ejecutivo. No hay tope de metros para la venta en línea.",
+    "discrepancias_detectadas": [
+      "IVA en el checkout: los precios del sitio son NETO. CONFIRMAR si el checkout de Shopify agrega el 19% automáticamente o si el cliente paga el neto publicado, para que el total que dice el agente coincida con lo que se cobra.",
+      "Poste del panel 358: el sitio vende un único 'Poste PRO Fence' en 2.3 / 2.6 / 3.0 m. Para el 358 (2.40 m) se asume el poste de 3.0 m (60x60x2mm) según el cuestionario. CONFIRMAR sección y compatibilidad exacta.",
+      "Brazo anti-escalada: es un accesorio opcional (1 por panel). No se incluye por defecto en la cotización del cerco; se ofrece aparte."
+    ]
+  },
+
+  "categorias": {
+
+    "cercos_3d": {
+      "nombre": "Cercos ACMAFOR / Pro Fence 3D",
+      "uso": "Cierre perimetral 3D para viviendas, empresas, bodegas e instalaciones industriales.",
+      "descripcion": "Panel 3D de acero de alta resistencia, galvanizado y pintado en polvo verde. Fijación con tornillos anti-robo. Se compone de paneles (2,5 m de ancho) más postes.",
+      "webpay_elegible": true,
+      "productos": [
+        {
+          "id": "cerco-3d-180",
+          "nombre": "Cerco Pro Fence 3D 1,80 m",
+          "linea": "3D (ACMAFOR)",
+          "acabado": "Galvanizado + pintado polvo verde",
+          "fijacion": "Tornillos anti-robo",
+          "abertura_malla_mm": "55 x 200",
+          "curvas_refuerzo": 4,
+          "panel": {
+            "descripcion": "Panel 3D 1,80 x 2,50 m, alambre 4,2 mm",
+            "ancho_m": 2.5,
+            "alto_m": 1.8,
+            "alambre_mm": 4.2,
+            "precio_neto_clp": 21420,
+            "shopify_variant_id": "48750433042675"
+          },
+          "poste": {
+            "descripcion": "Poste 2,3 m, sección 60x60x1,5 mm",
+            "largo_m": 2.3,
+            "seccion": "60x60x1,5 mm",
+            "precio_neto_clp": 14698,
+            "shopify_variant_id": "48750600716531",
+            "fijaciones_por_poste": 4
+          },
+          "url": "https://www.cercosdeseguridad.cl/products/pro-fence-3d-4-2mm"
+        },
+        {
+          "id": "cerco-3d-208",
+          "nombre": "Cerco Pro Fence 3D 2,08 m",
+          "linea": "3D (ACMAFOR)",
+          "acabado": "Galvanizado + pintado polvo verde",
+          "fijacion": "Tornillos anti-robo",
+          "abertura_malla_mm": "55 x 200",
+          "curvas_refuerzo": 5,
+          "panel": {
+            "descripcion": "Panel 3D 2,08 x 2,50 m, alambre 4,2 mm",
+            "ancho_m": 2.5,
+            "alto_m": 2.08,
+            "alambre_mm": 4.2,
+            "precio_neto_clp": 23402,
+            "shopify_variant_id": "48750433075443"
+          },
+          "poste": {
+            "descripcion": "Poste 2,6 m, sección 60x60x1,5 mm",
+            "largo_m": 2.6,
+            "seccion": "60x60x1,5 mm",
+            "precio_neto_clp": 15958,
+            "shopify_variant_id": "48750600749299",
+            "fijaciones_por_poste": 5
+          },
+          "url": "https://www.cercosdeseguridad.cl/products/pro-fence-3d-4-2mm"
+        }
+      ]
+    },
+
+    "cercos_358": {
+      "nombre": "Cercos de Alta Seguridad 358",
+      "uso": "Máxima seguridad anti-corte y anti-escalada: aeropuertos, recintos militares, fábricas, subestaciones e instalaciones críticas.",
+      "descripcion": "Panel de malla 358 (aberturas pequeñas que impiden el trepado y el corte), acero de alta resistencia galvanizado y pintado. Se compone de paneles (2,5 m de ancho) más postes.",
+      "webpay_elegible": true,
+      "productos": [
+        {
+          "id": "cerco-358-240",
+          "nombre": "Cerco Pro Fence 358 Alta Seguridad 2,40 m",
+          "linea": "358 Alta Seguridad",
+          "acabado": "Galvanizado + pintado polvo verde",
+          "panel": {
+            "descripcion": "Panel 358 2,40 x 2,50 m, alambre 4 mm",
+            "ancho_m": 2.5,
+            "alto_m": 2.4,
+            "alambre_mm": 4.0,
+            "precio_neto_clp": 110900,
+            "shopify_variant_id": "48750635155699"
+          },
+          "poste": {
+            "descripcion": "Poste 3,0 m, sección 60x60x2 mm",
+            "largo_m": 3.0,
+            "seccion": "60x60x2 mm",
+            "precio_neto_clp": 18490,
+            "shopify_variant_id": "48750600782067",
+            "fijaciones_por_poste": 5,
+            "advertencia": "Poste asignado al 358 por el cuestionario; confirmar compatibilidad con un ejecutivo."
+          },
+          "url": "https://www.cercosdeseguridad.cl/products/pro-fence-358-alta-seguridad"
+        }
+      ]
+    },
+
+    "componentes": {
+      "nombre": "Componentes y accesorios (venta por unidad)",
+      "uso": "Paneles, postes y accesorios sueltos, para quien solo necesita repuestos o complementar.",
+      "webpay_elegible": true,
+      "venta_por_unidad": true,
+      "productos": [
+        {
+          "id": "comp-panel-3d-180",
+          "nombre": "Panel 3D 1,80 x 2,50 m (alambre 4,2 mm)",
+          "unidad": "panel",
+          "precio_neto_clp": 21420,
+          "shopify_variant_id": "48750433042675"
+        },
+        {
+          "id": "comp-panel-3d-208",
+          "nombre": "Panel 3D 2,08 x 2,50 m (alambre 4,2 mm)",
+          "unidad": "panel",
+          "precio_neto_clp": 23402,
+          "shopify_variant_id": "48750433075443"
+        },
+        {
+          "id": "comp-panel-358",
+          "nombre": "Panel 358 Alta Seguridad 2,40 x 2,50 m (alambre 4 mm)",
+          "unidad": "panel",
+          "precio_neto_clp": 110900,
+          "shopify_variant_id": "48750635155699"
+        },
+        {
+          "id": "comp-poste-23",
+          "nombre": "Poste 2,3 m (60x60x1,5 mm)",
+          "unidad": "poste",
+          "precio_neto_clp": 14698,
+          "shopify_variant_id": "48750600716531"
+        },
+        {
+          "id": "comp-poste-26",
+          "nombre": "Poste 2,6 m (60x60x1,5 mm)",
+          "unidad": "poste",
+          "precio_neto_clp": 15958,
+          "shopify_variant_id": "48750600749299"
+        },
+        {
+          "id": "comp-poste-30",
+          "nombre": "Poste 3,0 m (60x60x2 mm)",
+          "unidad": "poste",
+          "precio_neto_clp": 18490,
+          "shopify_variant_id": "48750600782067"
+        },
+        {
+          "id": "comp-brazo-antiescalada",
+          "nombre": "Brazo de seguridad anti-escalada",
+          "unidad": "brazo",
+          "descripcion": "Accesorio que se monta sobre el poste para sumar seguridad anti-escalada. Se recomienda 1 por panel.",
+          "precio_neto_clp": 6200,
+          "shopify_variant_id": "48750604517619"
+        },
+        {
+          "id": "comp-fijacion-doble",
+          "nombre": "Fijación doble + tornillo antirrobo",
+          "unidad": "fijación",
+          "descripcion": "Clip que fija el panel al poste con tornillo antirrobo de acero inoxidable 304 (requiere llave especial; no se saca desde afuera con herramientas comunes). Sirve para paneles 3D y 358.",
+          "precio_neto_clp": 500,
+          "shopify_variant_id": "49838994587891"
+        }
+      ]
+    }
+  }
+}
