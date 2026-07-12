@@ -22,7 +22,7 @@
     "discrepancias_detectadas": [
       "IVA en el checkout: los precios del sitio son NETO. CONFIRMAR si el checkout de Shopify agrega el 19% automáticamente o si el cliente paga el neto publicado, para que el total que dice el agente coincida con lo que se cobra.",
       "Poste del panel 358: el sitio vende un único 'Poste PRO Fence' en 2.3 / 2.6 / 3.0 m. Para el 358 (2.40 m) se asume el poste de 3.0 m (60x60x2mm) según el cuestionario. CONFIRMAR sección y compatibilidad exacta.",
-      "Brazo anti-escalada: es un accesorio opcional (1 por panel). No se incluye por defecto en la cotización del cerco; se ofrece aparte."
+      "Brazo anti-escalada: es un accesorio opcional (1 por poste). No se incluye por defecto en la cotización del cerco; se ofrece aparte como upsell."
     ]
   },
 
@@ -174,7 +174,7 @@
           "id": "comp-brazo-antiescalada",
           "nombre": "Brazo de seguridad anti-escalada",
           "unidad": "brazo",
-          "descripcion": "Accesorio que se monta sobre el poste para sumar seguridad anti-escalada. Se recomienda 1 por panel.",
+          "descripcion": "Accesorio que se monta sobre el poste para sumar seguridad anti-escalada y sirve de soporte para montar concertinas. Se recomienda 1 por poste.",
           "precio_neto_clp": 6200,
           "shopify_variant_id": "48750604517619"
         },

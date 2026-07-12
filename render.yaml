@@ -23,10 +23,10 @@ services:
       - key: AGENTE_MODELO
         value: claude-sonnet-4-6
       - key: KOMMO_SUBDOMAIN
-        value: cds                 # TODO: confirmar subdominio real de Kommo
+        value: chilepastos
       - key: KOMMO_PIPELINE_ID
-        value: ""                  # TODO: id del embudo "CDS Agente de IA"
+        value: "11041527"          # embudo "CDS - Cercos de seguridad"
       - key: KOMMO_STATUS_ID
-        value: ""                  # TODO: id de la etapa "Lead entrante"
+        value: "84699591"          # etapa "Contacto inicial" (NO usar la de "Leads Entrantes"/type=1: dispara la distribución)
       - key: SHOP_BASE_URL
         value: https://www.cercosdeseguridad.cl
