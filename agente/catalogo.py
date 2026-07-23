@@ -20,14 +20,19 @@ CATALOGO_PATH = os.path.join(BASE_DIR, "fichas-tecnicas", "catalogo.json")
 IVA = 0.19
 ANCHO_PANEL_M = 2.5  # cada panel cubre 2,5 m de ancho
 FIJACION_ID = "comp-fijacion-doble"  # componente cuyo precio usa la cotización del cerco
+ESPARRAGO_ID = "comp-esparrago-anclaje"  # espárrago de anclaje: 1 por poste, incluido en el cerco
 
 
-def _precio_fijacion() -> int | float | None:
-    """Precio neto de la fijación (desde el catálogo), o None si no está disponible."""
-    info = obtener_producto(FIJACION_ID)
+def _precio_componente(comp_id: str) -> int | float | None:
+    """Precio neto de un componente (desde el catálogo), o None si no está disponible."""
+    info = obtener_producto(comp_id)
     if info and isinstance(info[2].get("precio_neto_clp"), (int, float)):
         return info[2]["precio_neto_clp"]
     return None
+
+
+def _precio_fijacion() -> int | float | None:
+    return _precio_componente(FIJACION_ID)
 
 
 def paneles_para(metros_lineales: float) -> int:
@@ -170,6 +175,20 @@ def cotizar_cerco(producto_id: str, metros_lineales: float) -> dict:
             "neto_clp": round(neto_fij),
         }
 
+    # Espárragos de anclaje: 1 por poste. Se incluyen en el total.
+    p_esp = _precio_componente(ESPARRAGO_ID)
+    esparragos_out = None
+    if p_esp:
+        n_esp = n_postes
+        neto_esp = p_esp * n_esp
+        neto += neto_esp
+        esparragos_out = {
+            "cantidad": n_esp,
+            "por_poste": 1,
+            "precio_neto_unit_clp": p_esp,
+            "neto_clp": round(neto_esp),
+        }
+
     iva = round(neto * IVA)
     total = round(neto + iva)
 
@@ -185,12 +204,14 @@ def cotizar_cerco(producto_id: str, metros_lineales: float) -> dict:
         "iva_clp": iva,
         "total_clp": total,
         "moneda": "CLP",
-        "nota": ("Incluye paneles + postes + fijaciones (por poste). Postes calculados como "
-                 "paneles + 1 (tramo recto). El total es del material; el despacho lo cotiza y "
-                 "coordina un ejecutivo."),
+        "nota": ("Incluye paneles + postes + fijaciones (por poste) + espárragos de anclaje "
+                 "(1 por poste). Postes calculados como paneles + 1 (tramo recto). El total es del "
+                 "material; el despacho lo cotiza y coordina un ejecutivo."),
     }
     if fijaciones_out:
         resultado["fijaciones"] = fijaciones_out
+    if esparragos_out:
+        resultado["esparragos"] = esparragos_out
     return resultado
 
 

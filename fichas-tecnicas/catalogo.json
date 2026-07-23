@@ -185,6 +185,13 @@
           "descripcion": "Clip que fija el panel al poste con tornillo antirrobo de acero inoxidable 304 (requiere llave especial; no se saca desde afuera con herramientas comunes). Sirve para paneles 3D y 358.",
           "precio_neto_clp": 500,
           "shopify_variant_id": "49838994587891"
+        },
+        {
+          "id": "comp-esparrago-anclaje",
+          "nombre": "Espárrago de anclaje",
+          "unidad": "espárrago",
+          "descripcion": "Espárrago que ancla el poste a la base/fundación. Se requiere 1 por poste. Incluido en la cotización del cerco.",
+          "precio_neto_clp": 500
         }
       ]
     }
