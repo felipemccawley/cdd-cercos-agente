@@ -22,7 +22,16 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 from agente.agente import AgenteComercial
 from agente.integraciones import documentos, kommo, whatsapp
 
-app = FastAPI(title="WhatsApp CDS - Cercos de Seguridad")
+app = FastAPI(title="CDS - Cercos de Seguridad (WhatsApp + Messenger + Instagram)")
+
+# Canal Messenger/Instagram (mismo agente, otro webhook). Se monta aquí para que un solo
+# servicio atienda los tres canales. Si el módulo no está disponible, el server sigue con WhatsApp.
+try:
+    from canal_messenger import router as messenger_router
+
+    app.include_router(messenger_router)
+except Exception as _e:  # noqa: BLE001
+    print(f"[messenger] router no montado: {type(_e).__name__}: {_e}")
 
 # --- Seguimiento de conversaciones silenciosas -------------------------------
 # Si el cliente deja de responder: a los SEGUIMIENTO_MINUTOS se le envía UN mensaje suave;
