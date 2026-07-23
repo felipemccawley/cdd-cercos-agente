@@ -9,6 +9,7 @@ Requiere:   ANTHROPIC_API_KEY en el entorno (o `ant auth login`).
 from __future__ import annotations
 
 import base64
+import difflib
 import mimetypes
 import os
 import sys
@@ -106,6 +107,11 @@ class AgenteComercial:
         else:
             self.messages.append({"role": "user", "content": mensaje_usuario})
 
+        # Texto que el modelo escribe en vueltas que ADEMÁS piden herramientas. Antes se perdía
+        # (solo se devolvía el texto de la última vuelta), y con eso podía perderse una cotización
+        # entera sin dejar rastro. Se acumula aquí y se une al final, sin repetir.
+        parciales: list[str] = []
+
         # Agentic loop: repetir mientras Claude pida ejecutar herramientas.
         while True:
             resp = self.client.messages.create(
@@ -123,7 +129,12 @@ class AgenteComercial:
                 return "(El asistente no puede continuar con esta solicitud.)"
 
             if resp.stop_reason != "tool_use":
-                return self._texto(resp.content)
+                return self._unir(parciales, self._texto(resp.content))
+
+            # Esta vuelta pide herramientas, pero puede traer texto para el cliente: guardarlo.
+            parcial = self._texto(resp.content)
+            if parcial:
+                parciales.append(parcial)
 
             # Ejecutar todas las herramientas solicitadas y devolver resultados.
             tool_results = []
@@ -145,6 +156,54 @@ class AgenteComercial:
     @staticmethod
     def _texto(content) -> str:
         return "\n".join(b.text for b in content if b.type == "text").strip()
+
+    @staticmethod
+    def _normaliza(texto: str) -> str:
+        return " ".join(texto.lower().split())
+
+    @classmethod
+    def _repetido(cls, bloque: str, previos: list[str]) -> bool:
+        """¿Este bloque ya fue dicho (igual o casi igual) en alguno de `previos`?"""
+        b = cls._normaliza(bloque)
+        if len(b) < 15:  # saludos/muletillas cortas: no vale la pena arrastrarlas
+            return True
+        for otro in previos:
+            if not otro:
+                continue
+            if b in otro or otro in b:
+                return True
+            if difflib.SequenceMatcher(None, b, otro).ratio() >= 0.75:
+                return True
+            # El modelo suele re-enunciar más largo lo que dejó a medias antes de la herramienta:
+            # comparar el fragmento común más largo contra el bloque MÁS CORTO (ratio() castiga
+            # la diferencia de largo y dejaría pasar la repetición).
+            m = difflib.SequenceMatcher(None, b, otro).find_longest_match(0, len(b), 0, len(otro))
+            if m.size >= 0.6 * min(len(b), len(otro)):
+                return True
+        return False
+
+    @classmethod
+    def _unir(cls, parciales: list[str], final: str) -> str:
+        """Une el texto de las vueltas intermedias con el de la vuelta final, sin repetir.
+
+        Tras recibir el resultado de una herramienta, el modelo suele re-enunciar lo que ya había
+        escrito. Por eso se compara bloque a bloque (párrafos) y se descarta lo que el texto final
+        —o un bloque ya aceptado— ya cubre. Así no se pierde contenido (p. ej. una cotización
+        escrita antes de llamar otra herramienta) ni se duplica lo repetido.
+        """
+        if not parciales:
+            return final
+        vistos = [cls._normaliza(b) for b in final.split("\n\n") if b.strip()]
+        salida: list[str] = []
+        for parcial in parciales:
+            for bloque in parcial.split("\n\n"):
+                bloque = bloque.strip()
+                if not bloque or cls._repetido(bloque, vistos):
+                    continue
+                salida.append(bloque)
+                vistos.append(cls._normaliza(bloque))
+        salida.append(final)
+        return "\n\n".join(x for x in salida if x).strip()
 
     def _transcripcion(self) -> str:
         """Arma la transcripción legible de la conversación (para adjuntar al lead)."""
